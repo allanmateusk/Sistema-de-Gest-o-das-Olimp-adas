@@ -1,0 +1,87 @@
+micronaut:
+  application:
+    name: sgo-api
+  server:
+    port: ${SERVER_PORT:8080}
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowed-origins:
+            - ${CORS_ALLOWED_ORIGINS:http://localhost:3000}
+            - http://localhost:5173
+          allowed-methods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+            - OPTIONS
+          allowed-headers: "*"
+          allow-credentials: true
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      swagger-ui:
+        paths: classpath:META-INF/swagger/views/swagger-ui
+        mapping: /swagger-ui/**
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        claims-names:
+          roles: roles
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_SECRET:changeMeDevSecretKeyAtLeast32CharactersLong!!}
+            validator:
+              secret: ${JWT_SECRET:changeMeDevSecretKeyAtLeast32CharactersLong!!}
+    intercept-url-map:
+      - pattern: /auth/login
+        httpMethod: POST
+        access: isAnonymous()
+      - pattern: /swagger/**
+        access: isAnonymous()
+      - pattern: /swagger-ui/**
+        access: isAnonymous()
+      - pattern: /health/**
+        access: isAnonymous()
+
+endpoints:
+  health:
+    enabled: true
+    sensitive: false
+    details-visible: ANONYMOUS
+
+datasources:
+  default:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:sgo}
+    username: ${DB_USER:sgo}
+    password: ${DB_PASSWORD:sgo}
+    driver-class-name: org.postgresql.Driver
+    dialect: POSTGRES
+
+jpa:
+  default:
+    entity-scan:
+      packages: com.sgo.infrastructure.persistence.entity
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
+        show_sql: false
+        format_sql: false
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      locations: classpath:db/migration
+
+sgo:
+  jwt:
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:480}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000}

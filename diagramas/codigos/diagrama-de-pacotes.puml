@@ -1,0 +1,15 @@
+@startuml
+package com.sgo {
+  package domain
+  package application
+  package infrastructure
+  package presentation
+  package facade
+}
+
+presentation ..> facade
+facade ..> application
+application ..> domain
+infrastructure ..> application
+presentation ..> application
+@enduml

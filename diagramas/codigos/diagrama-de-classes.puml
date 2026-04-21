@@ -1,0 +1,33 @@
+@startuml
+class Competicao {
+  +UUID id
+  +String nome
+  +Instant dataInicio
+  +Instant dataFim
+}
+
+class Atleta {
+  +UUID id
+  +String nome
+}
+
+class Pais {
+  +UUID id
+  +String nome
+}
+
+class Local {
+  +UUID id
+  +String nome
+}
+
+class Resultado {
+  +UUID id
+  +int posicao
+}
+
+Atleta "n" --> "1" Pais : pais
+Resultado --> Competicao
+Resultado --> Atleta
+Competicao --> Local : local opcional
+@enduml
