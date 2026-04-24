@@ -1,0 +1,2 @@
+# Evita shebang quebrado no Linux/CI (CRLF)
+**/gradlew text eol=lf
