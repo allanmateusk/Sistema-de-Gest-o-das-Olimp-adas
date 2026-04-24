@@ -29,6 +29,7 @@ dependencies {
     implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.micronaut.validation:micronaut-validation")
+    implementation("io.projectreactor:reactor-core:3.6.10")
     implementation("jakarta.persistence:jakarta.persistence-api")
 
     implementation("org.flywaydb:flyway-database-postgresql")

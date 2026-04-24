@@ -11,6 +11,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,6 +33,7 @@ public class AlocacaoController {
 
     @Post
     @Operation(summary = "Alocar local à competição")
+    @ApiResponse(responseCode = "201", description = "Alocação criada")
     public HttpResponse<IdResponse> alocar(@Body @Valid AlocacaoRequest request) {
         UUID id = facade.alocarLocal(request.competicaoId(), request.localId());
         return HttpResponse.created(new IdResponse(id));

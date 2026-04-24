@@ -1,42 +1,43 @@
 import { Link } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/useAuth";
 
 export function HomePage() {
   const { isAdmin, perfil } = useAuth();
 
   return (
     <div className="stack">
-      <h1>Painel</h1>
-      <p>
-        Perfil atual: <strong>{perfil}</strong>
-      </p>
-      <p className="muted">
-        Use o menu para navegar. Rotas administrativas exigem perfil ADMIN.
-      </p>
+      <div className="page-hero">
+        <h1 className="page-title">Bem-vindo</h1>
+        <p>
+          Perfil: <strong>{perfil === "ADMIN" ? "Admin" : "Usuário"}</strong> —{" "}
+          acompanhe competições, resultados e pódio. Rotas de cadastro e resultados
+          requerem perfil de administrador.
+        </p>
+      </div>
       <div className="grid-links">
         {isAdmin && (
           <>
-            <Link className="tile" to="/competicoes">
+            <Link className="tile sport-c1" to="/competicoes">
               <h3>Competições</h3>
-              <p>Cadastrar e listar competições</p>
+              <p>Cadastrar e listar provas, datas e locais</p>
             </Link>
-            <Link className="tile" to="/inscricoes">
+            <Link className="tile sport-c2" to="/inscricoes">
               <h3>Inscrições</h3>
-              <p>Inscrever atletas</p>
+              <p>Inscrever atletas nas competições</p>
             </Link>
-            <Link className="tile" to="/alocacoes">
+            <Link className="tile sport-c3" to="/alocacoes">
               <h3>Alocações</h3>
-              <p>Definir local da competição</p>
+              <p>Definir pistas e centros de competição</p>
             </Link>
-            <Link className="tile" to="/resultados">
+            <Link className="tile sport-c4" to="/resultados">
               <h3>Resultados</h3>
-              <p>Registrar posições</p>
+              <p>Registrar posições e pódio</p>
             </Link>
           </>
         )}
-        <Link className="tile" to="/medalhas">
+        <Link className="tile sport-c5" to="/medalhas">
           <h3>Medalhas</h3>
-          <p>Relatório por país</p>
+          <p>Contagem de ouro, prata e bronze por país</p>
         </Link>
       </div>
     </div>

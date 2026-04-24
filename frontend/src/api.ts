@@ -1,10 +1,11 @@
 import axios from "axios";
+import { resolveApiBaseUrl } from "./config";
 
 /**
  * Padrão `/api`: mesmo host do SPA — o Vite (dev) e o Nginx (Docker) fazem proxy para a API.
  * Defina `VITE_API_URL` (ex.: `http://localhost:8080`) só se quiser chamar a API direto, sem proxy.
  */
-const baseURL = import.meta.env.VITE_API_URL ?? "/api";
+const baseURL = resolveApiBaseUrl(import.meta.env.VITE_API_URL);
 
 export const api = axios.create({
   baseURL,

@@ -1,10 +1,43 @@
+/* Tema SGO: olímpiadas, energia esportiva, referência sutil aos 5 anéis */
+
 :root {
+  --font-sans: "Lexend", system-ui, sans-serif;
+  --font-display: "Bebas Neue", Impact, system-ui, sans-serif;
+
+  /* Cores de anel + energia (WCAG cuidada em pares) */
+  --olympic-blue: #0c8bd9;
+  --olympic-yellow: #e8c100;
+  --olympic-black: #1e242c;
+  --olympic-red: #e63946;
+  --olympic-green: #06b87a;
+  --olympic-cyan: #2dd4cf;
+
+  --bg-deep: #071018;
+  --bg-mid: #0c1e2c;
+  --bg-card: linear-gradient(145deg, rgba(20, 45, 70, 0.92) 0%, rgba(8, 28, 45, 0.96) 100%);
+  --line: rgba(0, 197, 200, 0.22);
+  --line-strong: rgba(255, 200, 87, 0.4);
+
+  --text: #eef6fc;
+  --text-muted: #8eb3c9;
+  --text-dark: #0a1620;
+
+  --glow: 0 0 32px rgba(0, 201, 200, 0.18);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.4);
+
   color-scheme: dark;
-  font-family: "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-  background: #0f1419;
-  color: #e7eef7;
+  color: var(--text);
+  background: var(--bg-deep);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(12, 139, 217, 0.35), transparent 50%),
+    radial-gradient(ellipse 80% 50% at 100% 50%, rgba(6, 184, 122, 0.12), transparent 45%),
+    radial-gradient(ellipse 60% 40% at 0% 80%, rgba(230, 57, 70, 0.1), transparent 50%),
+    linear-gradient(168deg, #061018 0%, #0a1a28 35%, #07121c 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 * {
@@ -14,20 +47,57 @@
 body {
   margin: 0;
   min-height: 100vh;
+  font-synthesis: none;
 }
 
 a {
-  color: #7ec8ff;
+  color: var(--olympic-cyan, #2ee6e0);
   text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, filter 0.15s ease;
 }
+
 a:hover {
-  text-decoration: underline;
+  color: #6ef3ee;
+  text-decoration: none;
+  filter: brightness(1.08);
+}
+
+h1,
+h2,
+h3,
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0, 180, 200, 0.25);
+}
+
+h1 {
+  font-size: clamp(1.85rem, 4.5vw, 2.35rem);
+  margin: 0 0 0.5rem;
+}
+
+h2,
+h3 {
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.4rem;
+}
+
+p {
+  margin: 0.4rem 0 0;
 }
 
 code {
-  background: #1b2430;
-  padding: 0.1rem 0.35rem;
-  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.1rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.88em;
+  border: 1px solid var(--line);
 }
 
 .app-shell {
@@ -36,156 +106,494 @@ code {
   flex-direction: column;
 }
 
+/* Faixa “pista / faixa de corrida” no header */
 .topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 1rem;
-  padding: 0.75rem 1.25rem;
-  border-bottom: 1px solid #243041;
-  background: #121a24;
+  padding: 0.9rem 1.35rem;
+  background: linear-gradient(90deg, rgba(7, 24, 38, 0.98) 0%, rgba(12, 50, 72, 0.95) 50%, rgba(7, 30, 48, 0.98) 100%);
+  border-bottom: 1px solid var(--line);
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 100;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.topbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0081c4, #e8c000, #e63946, #00a86b, #0081c4);
+  background-size: 200% 100%;
+  animation: stripe 12s linear infinite;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+@keyframes stripe {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 .brand {
   display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.9rem;
 }
 
-.logo {
-  font-weight: 800;
-  letter-spacing: 0.04em;
+.brand > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.brand .tagline {
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--olympic-yellow);
+  text-shadow: 0 0 20px rgba(232, 192, 0, 0.35);
 }
 
 .nav {
   display: flex;
-  gap: 0.75rem;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+a.nav-link {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  color: #dbeaf5;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s;
+}
+
+a.nav-link:hover {
+  background: rgba(0, 201, 200, 0.2);
+  border-color: rgba(0, 201, 200, 0.45);
+  color: #fff;
+  box-shadow: var(--glow);
+  transform: translateY(-1px);
+}
+
+a.nav-link:active {
+  transform: translateY(0);
 }
 
 .user {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
 .muted {
-  color: #9fb0c3;
-  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Logo = Bebas, bloco dourado sutil */
+.logo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.9rem;
+  line-height: 0.9;
+  letter-spacing: 0.12em;
+  background: linear-gradient(90deg, #ffedd0 0%, #ffc857 25%, #fff 50%, #ffc857 75%, #ffe8b0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(255, 200, 80, 0.35));
+}
+
+/* Anéis olímpicos estilizados (SVG) */
+.olympic-rings {
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+}
+
+.rings-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  max-width: 3.2rem;
+  line-height: 1.1;
+  opacity: 0.7;
 }
 
 .main {
-  padding: 1.25rem;
-  max-width: 1100px;
+  padding: 1.5rem 1.25rem 2.5rem;
+  max-width: 1120px;
   width: 100%;
   margin: 0 auto;
+  flex: 1;
+  position: relative;
+}
+
+/* Decoração leve: grid esportivo */
+.main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  max-width: 100%;
+  background-image: linear-gradient(rgba(0, 199, 200, 0.04) 1px, transparent 1px);
+  background-size: 100% 28px;
+  pointer-events: none;
+  opacity: 0.4;
+  mask-image: linear-gradient(180deg, black 0%, transparent 60%);
+  z-index: 0;
+}
+
+.main > * {
+  position: relative;
+  z-index: 1;
 }
 
 .stack {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.1rem;
+}
+
+/* Hero início */
+.page-hero {
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem 1.4rem;
+  background: linear-gradient(120deg, rgba(12, 139, 217, 0.18) 0%, rgba(6, 184, 122, 0.12) 100%);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 0.25rem;
+}
+
+.page-hero p {
+  margin: 0;
+  max-width: 52ch;
+  color: #c2dce8;
+  font-size: 0.98rem;
+}
+
+strong {
+  color: var(--olympic-yellow);
+  font-weight: 600;
 }
 
 .card {
-  background: #121a24;
-  border: 1px solid #243041;
-  border-radius: 10px;
-  padding: 1rem 1.1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.15rem 1.2rem;
+  box-shadow: var(--glow);
 }
 
 .card.narrow {
-  max-width: 420px;
-  margin: 3rem auto;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.card.login-card h2 {
+  margin-bottom: 1.1rem;
+  font-size: 1.35rem;
+}
+
+/* Login: página cheia, sem Layout */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-backdrop {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(12, 139, 217, 0.2), transparent 45%),
+    radial-gradient(circle at 80% 20%, rgba(6, 184, 122, 0.15), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(255, 200, 80, 0.08), transparent 50%),
+    linear-gradient(180deg, #040a0f 0%, #0a1a2a 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.login-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.login-hero {
+  text-align: center;
+}
+
+.login-hero .olympic-rings {
+  margin: 0 auto 0.75rem;
+  transform: scale(1.15);
+}
+
+.login-hero h1 {
+  font-size: clamp(2.4rem, 7vw, 3.2rem);
+  margin: 0;
+}
+
+.login-hero p.sub {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin: 0.4rem 0 0;
+  line-height: 1.4;
+  max-width: 34ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card.login-card {
+  width: 100%;
+  border: 1px solid rgba(255, 200, 87, 0.2);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  background: linear-gradient(160deg, rgba(18, 50, 72, 0.95), rgba(8, 22, 36, 0.98));
 }
 
 .grid-links {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
+a.tile,
 .tile {
-  border: 1px solid #243041;
-  border-radius: 10px;
-  padding: 0.9rem;
-  background: #0f1722;
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.05rem;
+  background: linear-gradient(145deg, rgba(10, 35, 55, 0.85), rgba(6, 20, 35, 0.92));
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+  border-left: 4px solid #0081c4;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
 }
+
+a.tile.sport-c1 { border-left-color: #0c8bd9; }
+a.tile.sport-c2 { border-left-color: #e8c000; }
+a.tile.sport-c3 { border-left-color: #e63946; }
+a.tile.sport-c4 { border-left-color: #06b87a; }
+a.tile.sport-c5 { border-left-color: #a78bfa; }
+a.tile.sport-c6 { border-left-color: #f472b6; }
+
+a.tile h3,
 .tile h3 {
-  margin: 0 0 0.35rem;
+  font-family: var(--font-sans);
+  text-transform: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 1.05rem;
+  color: #f0f7fc;
+  margin: 0 0 0.4rem;
 }
+
+a.tile p,
 .tile p {
+  color: #9eb9cc;
+  font-size: 0.9rem;
   margin: 0;
-  color: #9fb0c3;
-  font-size: 0.95rem;
+}
+
+a.tile:hover,
+.tile:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--glow);
+  transform: translateY(-3px);
+  border-left-color: var(--olympic-cyan, #2ee6e0);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 label {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.95rem;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #b8d0e0;
 }
 
 input,
 select {
-  padding: 0.55rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid #2c3a50;
-  background: #0f1722;
-  color: #e7eef7;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 201, 200, 0.2);
+  background: rgba(4, 14, 24, 0.75);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(0, 201, 200, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 201, 200, 0.12);
 }
 
 .btn {
-  border-radius: 8px;
-  border: 1px solid #2c3a50;
-  padding: 0.55rem 0.85rem;
-  background: #1b2635;
-  color: #e7eef7;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.92rem;
   cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 }
+
 .btn.primary {
-  background: #2563eb;
-  border-color: #1d4ed8;
+  background: linear-gradient(135deg, #06a88a 0%, #0c6bb8 100%);
+  border-color: rgba(46, 230, 200, 0.35);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(0, 160, 200, 0.25);
 }
+
+.btn.primary:hover:not(:disabled) {
+  box-shadow: 0 8px 28px rgba(0, 201, 200, 0.4);
+  transform: translateY(-1px);
+}
+
 .btn.ghost {
   background: transparent;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #b8d4e4;
 }
+
+.btn.ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
 .btn:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  transform: none;
 }
 
 .error {
-  color: #fecaca;
+  color: #ff9a9a;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
 }
 .success {
-  color: #bbf7d0;
+  color: #7af0a8;
 }
 
+/* Tabelas + medalhas */
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.92rem;
+  font-family: var(--font-sans);
 }
 .table th,
 .table td {
-  border-bottom: 1px solid #243041;
-  padding: 0.45rem 0.35rem;
+  border-bottom: 1px solid rgba(0, 201, 200, 0.1);
+  padding: 0.5rem 0.45rem;
   text-align: left;
   vertical-align: top;
+}
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: #8ab4cc;
+  border-bottom: 1px solid rgba(255, 200, 87, 0.2);
+}
+.table tr:hover td {
+  background: rgba(0, 201, 200, 0.06);
+}
+.medal-table th:nth-child(2),
+.medal-table td:nth-child(2) {
+  color: #ffdf6e;
+  font-weight: 700;
+}
+.medal-table th:nth-child(3),
+.medal-table td:nth-child(3) {
+  color: #d4e0eb;
+  font-weight: 600;
+}
+.medal-table th:nth-child(4),
+.medal-table td:nth-child(4) {
+  color: #d4a57a;
+  font-weight: 600;
 }
 .mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.78rem;
   word-break: break-all;
+}
+
+@media (max-width: 700px) {
+  .olympic-rings {
+    width: 80px;
+    height: 36px;
+  }
+  .topbar {
+    padding: 0.75rem 1rem;
+  }
+  .user {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .main {
+    padding: 1rem 0.85rem 1.5rem;
+  }
 }

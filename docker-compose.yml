@@ -28,6 +28,10 @@ services:
       DB_PASSWORD: sgo
       JWT_SECRET: ${JWT_SECRET:-changeMeDevSecretKeyAtLeast32CharactersLong!!}
       CORS_ALLOWED_ORIGINS: http://localhost:3000
+      # Seed de contas demo; em produção use SGO_SEED_DEMO_ACCOUNTS=false e credenciais fortes.
+      SGO_SEED_DEMO_ACCOUNTS: ${SGO_SEED_DEMO_ACCOUNTS:-true}
+      SGO_SEED_ADMIN_PASSWORD: ${SGO_SEED_ADMIN_PASSWORD:-Admin@123}
+      SGO_SEED_USUARIO_PASSWORD: ${SGO_SEED_USUARIO_PASSWORD:-Usuario@123}
     depends_on:
       postgres:
         condition: service_healthy

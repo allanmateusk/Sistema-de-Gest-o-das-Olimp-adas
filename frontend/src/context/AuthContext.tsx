@@ -1,30 +1,16 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { api } from "../api";
-import type { LoginResponse, Perfil } from "../types";
+import type { LoginResponse } from "../types";
+import { AuthContext, type AuthState } from "./authContextValue";
 
-type AuthState = {
-  token: string | null;
-  perfil: Perfil | null;
-  login: (email: string, senha: string) => Promise<void>;
-  logout: () => void;
-  isAdmin: boolean;
-};
-
-const AuthContext = createContext<AuthState | undefined>(undefined);
+export type { AuthState } from "./authContextValue";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() =>
     sessionStorage.getItem("sgo_token")
   );
-  const [perfil, setPerfil] = useState<Perfil | null>(() =>
-    (sessionStorage.getItem("sgo_perfil") as Perfil | null) ?? null
+  const [perfil, setPerfil] = useState<AuthState["perfil"]>(() =>
+    (sessionStorage.getItem("sgo_perfil") as AuthState["perfil"]) ?? null
   );
 
   const login = useCallback(async (email: string, senha: string) => {
@@ -54,10 +40,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth(): AuthState {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth fora de AuthProvider");
-  return ctx;
 }

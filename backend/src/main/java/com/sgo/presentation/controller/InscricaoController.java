@@ -11,6 +11,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -32,6 +33,7 @@ public class InscricaoController {
 
     @Post
     @Operation(summary = "Inscrever atleta em competição")
+    @ApiResponse(responseCode = "201", description = "Inscrição registrada")
     public HttpResponse<IdResponse> inscrever(@Body @Valid InscricaoRequest request) {
         UUID id = facade.inscreverAtleta(request.atletaId(), request.competicaoId());
         return HttpResponse.created(new IdResponse(id));

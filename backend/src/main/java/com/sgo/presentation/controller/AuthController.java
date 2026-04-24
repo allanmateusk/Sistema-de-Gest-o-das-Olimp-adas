@@ -13,6 +13,7 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.rules.SecurityRule;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -29,7 +30,8 @@ public class AuthController {
 
     @Post("/login")
     @Secured(SecurityRule.IS_ANONYMOUS)
-    @Operation(summary = "Login com email e senha", description = "Retorna JWT Bearer para uso nas demais rotas.")
+    @SecurityRequirements
+    @Operation(summary = "Login com email e senha", description = "Retorna JWT Bearer para uso nas demais rotas. Público; sem Bearer.")
     public HttpResponse<LoginResponse> login(@Body @Valid LoginRequest request) {
         AutenticarUsuarioUseCase.LoginResult result = facade.login(request.email(), request.senha());
         LoginResponse body = new LoginResponse(

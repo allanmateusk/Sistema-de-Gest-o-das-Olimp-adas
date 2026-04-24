@@ -13,6 +13,7 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class CompeticaoController {
     @Post
     @Secured("ADMIN")
     @Operation(summary = "Cadastrar competição")
+    @ApiResponse(responseCode = "201", description = "Competição criada (Location: recurso com o id no corpo).")
     public HttpResponse<IdResponse> criar(@Body @Valid CompeticaoRequest request) {
         UUID id = facade.cadastrarCompeticao(
                 request.nome(),

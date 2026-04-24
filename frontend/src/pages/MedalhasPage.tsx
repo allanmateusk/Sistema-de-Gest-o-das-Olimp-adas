@@ -22,7 +22,7 @@ export function MedalhasPage() {
       <h1>Relatório de medalhas</h1>
       {erro && <p className="error">{erro}</p>}
       <div className="card">
-        <table className="table">
+        <table className="table medal-table">
           <thead>
             <tr>
               <th>País</th>

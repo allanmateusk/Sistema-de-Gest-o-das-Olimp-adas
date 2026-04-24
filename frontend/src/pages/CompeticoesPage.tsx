@@ -5,10 +5,10 @@ import { isAxiosError } from "axios";
 
 export function CompeticoesPage() {
   const [lista, setLista] = useState<Competicao[]>([]);
-  const [nome, setNome] = useState("100m rasos");
-  const [modalidade, setModalidade] = useState("Atletismo");
-  const [inicio, setInicio] = useState("2026-07-01T10:00:00.000Z");
-  const [fim, setFim] = useState("2026-07-15T18:00:00.000Z");
+  const [nome, setNome] = useState("");
+  const [modalidade, setModalidade] = useState("");
+  const [inicio, setInicio] = useState("");
+  const [fim, setFim] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -18,7 +18,18 @@ export function CompeticoesPage() {
   }
 
   useEffect(() => {
-    carregar().catch(() => setErro("Não foi possível carregar competições"));
+    let active = true;
+    void (async () => {
+      try {
+        const { data } = await api.get<Competicao[]>("/competicoes");
+        if (active) setLista(data);
+      } catch {
+        if (active) setErro("Não foi possível carregar competições");
+      }
+    })();
+    return () => {
+      active = false;
+    };
   }, []);
 
   async function onSubmit(e: FormEvent) {
@@ -51,19 +62,38 @@ export function CompeticoesPage() {
         <form onSubmit={onSubmit} className="form">
           <label>
             Nome
-            <input value={nome} onChange={(e) => setNome(e.target.value)} required />
+            <input
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              placeholder="Ex.: 100m rasos"
+              required
+            />
           </label>
           <label>
             Modalidade
-            <input value={modalidade} onChange={(e) => setModalidade(e.target.value)} />
+            <input
+              value={modalidade}
+              onChange={(e) => setModalidade(e.target.value)}
+              placeholder="Ex.: Atletismo"
+            />
           </label>
           <label>
             Início (ISO-8601)
-            <input value={inicio} onChange={(e) => setInicio(e.target.value)} required />
+            <input
+              value={inicio}
+              onChange={(e) => setInicio(e.target.value)}
+              placeholder="2026-07-01T10:00:00.000Z"
+              required
+            />
           </label>
           <label>
             Fim (ISO-8601)
-            <input value={fim} onChange={(e) => setFim(e.target.value)} required />
+            <input
+              value={fim}
+              onChange={(e) => setFim(e.target.value)}
+              placeholder="2026-07-15T18:00:00.000Z"
+              required
+            />
           </label>
           {erro && <p className="error">{erro}</p>}
           {msg && <p className="success">{msg}</p>}
