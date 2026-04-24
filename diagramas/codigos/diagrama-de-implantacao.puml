@@ -1,9 +1,0 @@
-@startuml
-node "Docker Host" {
-  artifact "frontend\n(nginx)" as F
-  artifact "backend\n(JVM)" as B
-  database "postgres" as P
-}
-F -down-> B : HTTP 8080 (host)
-B -down-> P : JDBC 5432
-@enduml

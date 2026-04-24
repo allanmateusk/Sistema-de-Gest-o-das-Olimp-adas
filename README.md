@@ -78,8 +78,10 @@ A SPA em React usa um **tema** inspirado no espírito dos Jogos Olímpicos: pale
 .
 ├── backend/                 # API Micronaut + Gradle
 ├── frontend/                # SPA React + Vite
-├── diagramas/codigos/       # Fontes PlantUML (.puml)
-├── docker-compose.yml       # Postgres + API + Nginx (static do front)
+├── diagramas/
+│   ├── codigos/             # Fontes PlantUML (.puml) — estilo inlinado, prontas para a Web
+│   └── imagens/             # PNG/SVG exportados (opcional; .gitignore ou commit conforme a equipa)
+├── docker-compose.yml       # Postgres + API + Nginx (stático do front, proxy /api)
 ├── .env.example             # Exemplo para JWT no Compose
 └── README.md
 ```
@@ -115,12 +117,12 @@ docker compose up --build -d
 
 | Serviço | URL |
 |---------|-----|
-| Frontend (Nginx servindo o build do Vite) | http://localhost:3000 |
+| Nginx (build do Vite, *SPA*) | http://localhost:3000 |
 | API | http://localhost:8080 |
 | Swagger UI | http://localhost:8080/swagger-ui |
 | Health | http://localhost:8080/health |
 
-O frontend na imagem Docker é buildado com `VITE_API_URL=http://localhost:8080` (navegador chama a API no host). O Postgres expõe **5432** no host; se já houver outro Postgres local, altere o mapeamento de porta no `docker-compose.yml` ou pare o serviço conflitante.
+No *build* Docker, o *frontend* usa `VITE_API_URL=/api`: o browser fala com a **mesma origem** (porta **3000**); o Nginx encaminha `location /api/` para o serviço `backend:8080` (ver `frontend/nginx.conf`), sem o cliente tratar a API noutro *host* explícito. O Postgres mapeia **5432** no *host*; se a porta estiver ocupada, ajuste o mapeamento no `docker-compose.yml` ou use outro Postgres noutro mapeamento.
 
 **JWT em desenvolvimento:** copie `.env.example` para `.env` na raiz se quiser sobrescrever `JWT_SECRET` usado pelo serviço `backend` (veja [Variáveis de ambiente](#variáveis-de-ambiente)).
 
@@ -285,7 +287,24 @@ Foram expostos **GET** auxiliares (ex.: listagens de competições, locais, atle
 
 ## Diagramas UML
 
-Fontes em `diagramas/codigos/*.puml`. Gere imagens (PNG/SVG) para `diagramas/imagens/` com a ferramenta PlantUML de sua preferência (CLI, plugin de IDE ou [plantuml.com](https://plantuml.com)).
+As fontes estão em `diagramas/codigos/`. O ficheiro `diagramas/codigos/_estilo-plantuml.puml` é a **referência** de tipografia e cores: o mesmo bloco de *skinparam* está **inlinado** em cada `diagrama-*.puml`, para o [PlantUML Web](https://www.plantuml.com/plantuml/uml) e a CLI **sem** `!include` (basta abrir o `.puml` e colar, ou apontar o *jar* à pasta). Quando globalizar o estilo, edite `_estilo-plantuml.puml` e **reaplique** o conteúdo a todos os `diagrama-*.puml`, ou use *find & replace* no diretório `diagramas/codigos/`.
+
+| Ficheiro | Conteúdo |
+|----------|----------|
+| `diagrama-de-pacotes.puml` | Pacotes `com.sgo`, dependências (facade, use cases, JPA, *rate limit*), `allowmixing` (pacotes + classes) |
+| `diagrama-de-classes.puml` | Entidades JPA, `PerfilUsuario` e relações, restrições de unicidade |
+| `diagrama-de-componentes.puml` | Nível de contentores: browser, Nginx, API Micronaut, PostgreSQL, *proxy* **/api** |
+| `diagrama-de-implantacao.puml` | *Docker Compose*: nós, portas, volume, *health check* (rótulos com `component "..."` para o PlantUML 1.2026) |
+| `diagrama-de-caso-de-uso.puml` | US01–US06, atores, `<<include>>` a partir de U01, alinhamento com o *front* |
+| `diagrama-sequencia-autenticacao.puml` | *POST /auth/login* (filtro, facade, *BCrypt*, *JWT*), *skinparam* extra para *sequence* |
+
+Gere **PNG** ou **SVG** para `diagramas/imagens/`, com a [CLI do PlantUML](https://plantuml.com/download) (**Java** + *jar* oficial) ou o *textarea* e “Exportar”. A partir da raiz do repositório (ajuste o caminho do *jar*):
+
+```bash
+java -Dfile.encoding=UTF-8 -jar plantuml.jar -charset UTF-8 -tpng -Sdpi=200 -o ../imagens diagramas/codigos/diagrama-*.puml
+```
+
+Ficheiros cujo nome começa por `_` (o estilo de referência) **não** entram nesse padrão `diagrama-*.puml` — evita gerar o `_estilo` sozinho. Cada ficheiro `diagrama-*.puml` é **autocontido**; cola-o integralmente no PlantUML Web.
 
 ---
 
