@@ -34,21 +34,42 @@ public class RequestIdFilter implements HttpServerFilter, Ordered {
                 .getFirst(RequestIdContext.HEADER)
                 .filter(s -> !s.isBlank())
                 .orElseGet(() -> UUID.randomUUID().toString());
+
+        // Esse trecho está bom, porque aproveita um requestId enviado pelo cliente ou cria um novo quando não existe.
+        // Isso ajuda bastante para acompanhar uma requisição nos logs.
+
         if (request instanceof MutableHttpRequest<?> mutable) {
             mutable.setAttribute(RequestIdContext.REQUEST_ATTRIBUTE, id);
         }
+
+        // Seria bom criar uma constante para a string "requestId".
+        // Como ela também pode ser usada em outros pontos do sistema, isso evita erro de digitação.
+
         MDC.put("requestId", id);
+
         @SuppressWarnings("unchecked")
         Publisher<MutableHttpResponse<?>> next = (Publisher<MutableHttpResponse<?>>) (Publisher<?>) chain.proceed(request);
+
+        // Esses casts deixam o código um pouco difícil de ler.
+        // Se possível, vale tentar simplificar essa parte para reduzir a necessidade de @SuppressWarnings.
+
         @SuppressWarnings("unchecked")
         Publisher<MutableHttpResponse<?>> out = (Publisher<MutableHttpResponse<?>>) (Object) Mono.from(next)
                 .map(response -> {
                     if (!response.getHeaders().contains(RequestIdContext.HEADER)) {
                         response.getHeaders().add(RequestIdContext.HEADER, id);
                     }
+
+                    // Está correto adicionar o requestId na resposta.
+                    // Isso facilita para o front-end ou para quem testar a API encontrar o mesmo id nos logs.
+
                     return response;
                 })
                 .doFinally(s -> MDC.remove("requestId"));
+
+        // O uso do doFinally é importante, porque garante que o MDC seja limpo no final da requisição.
+        // Isso evita que o requestId de uma chamada apareça por engano no log de outra.
+
         return out;
     }
 }
