@@ -63,6 +63,11 @@ public class DataSeed implements ApplicationEventListener<StartupEvent> {
     @Override
     @Transactional
     public void onApplicationEvent(StartupEvent event) {
+
+        // Esse método faz bastante coisa ao iniciar a aplicação.
+        // Para facilitar a leitura, seria melhor separar cada seed em métodos menores,
+        // como criarUsuarios(), criarPaises(), criarLocais() e criarAtletas().
+
         if (usuarioRepository.count() == 0) {
             if (seedDemoAccounts) {
                 if (notUsableForSeed(seedAdminPassword) || notUsableForSeed(seedUsuarioPassword)) {
@@ -116,6 +121,9 @@ public class DataSeed implements ApplicationEventListener<StartupEvent> {
             PaisEntity br = paisRepository.findById(ID_PAIS_BR).orElseThrow();
             PaisEntity us = paisRepository.findById(ID_PAIS_US).orElseThrow();
 
+            // O uso de orElseThrow() sem mensagem funciona, mas pode dificultar entender o erro se algum país não for encontrado.
+            // Seria melhor colocar uma mensagem simples explicando qual país não foi localizado.
+
             AtletaEntity a1 = new AtletaEntity();
             a1.setId(ID_ATLETA_1);
             a1.setNome("Atleta Brasil");
@@ -129,9 +137,17 @@ public class DataSeed implements ApplicationEventListener<StartupEvent> {
             atletaRepository.save(a1);
             atletaRepository.save(a2);
         }
+
+        // A classe está cumprindo bem o papel de popular dados iniciais.
+        // Mesmo assim, como ela mistura criação de usuários, países, locais e atletas,
+        // separar essas responsabilidades deixaria a manutenção mais simples.
     }
 
     private static boolean notUsableForSeed(String s) {
+
+        // Esse método ajuda a evitar repetição na validação das senhas.
+        // O nome está claro e facilita entender a regra usada antes de criar os usuários de teste.
+
         return s == null || s.isBlank() || s.length() < 8;
     }
 }
