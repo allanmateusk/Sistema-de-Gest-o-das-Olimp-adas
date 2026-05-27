@@ -35,7 +35,15 @@ public class AlocacaoController {
     @Operation(summary = "Alocar local à competição")
     @ApiResponse(responseCode = "201", description = "Alocação criada")
     public HttpResponse<IdResponse> alocar(@Body @Valid AlocacaoRequest request) {
+
+        // O controller está bem simples e passa a regra principal para a facade.
+        // Isso é positivo, porque evita deixar lógica de negócio dentro da camada de apresentação.
+
         UUID id = facade.alocarLocal(request.competicaoId(), request.localId());
+
+        // Seria interessante documentar também possíveis respostas de erro no Swagger,
+        // como 400 para dados inválidos, 401/403 para acesso não autorizado e 404 caso competição ou local não existam.
+
         return HttpResponse.created(new IdResponse(id));
     }
 }

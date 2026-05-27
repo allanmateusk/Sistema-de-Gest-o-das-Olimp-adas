@@ -19,10 +19,15 @@ public class ListarAtletasUseCase {
 
     @Transactional
     public List<AtletaResponse> execute() {
+
+        // Como esse método apenas lista atletas, talvez o @Transactional não seja necessário.
+        // Se não existe alteração no banco, o método pode ficar sem essa anotação para indicar que é apenas uma consulta.
+
         return atletaRepository.findAll().stream().map(this::toDto).toList();
     }
 
     private AtletaResponse toDto(AtletaEntity e) {
+
         return new AtletaResponse(
                 e.getId(),
                 e.getNome(),

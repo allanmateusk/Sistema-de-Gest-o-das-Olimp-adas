@@ -24,6 +24,11 @@ public class AtletaEntity {
     @JoinColumn(name = "pais_id", nullable = false)
     private PaisEntity pais;
 
+    // Uma melhoria seria usar Lombok com @Getter e @Setter para evitar a repetição dos métodos getters e setters.
+    // Como esses métodos não possuem nenhuma regra específica, o Lombok deixaria a entidade menor e mais limpa.
+    // Só é importante evitar @Data em entidades JPA, porque ele gera toString, equals e hashCode automaticamente,
+    // o que pode causar problema com relacionamentos LAZY, como o campo pais.
+
     public UUID getId() {
         return id;
     }

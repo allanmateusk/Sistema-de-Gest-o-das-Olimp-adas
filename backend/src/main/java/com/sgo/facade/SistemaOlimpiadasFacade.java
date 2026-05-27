@@ -46,6 +46,11 @@ public class SistemaOlimpiadasFacade {
             ListarLocaisUseCase listarLocaisUseCase,
             ListarAtletasUseCase listarAtletasUseCase
     ) {
+
+        // A ideia da Facade está boa, porque ajuda a deixar os controllers mais simples.
+        // O ponto de atenção é que essa classe já recebe muitos casos de uso no construtor.
+        // Se o sistema crescer mais, pode ficar difícil manter tudo em uma única facade.
+
         this.autenticarUsuarioUseCase = autenticarUsuarioUseCase;
         this.cadastrarCompeticaoUseCase = cadastrarCompeticaoUseCase;
         this.inscreverAtletaUseCase = inscreverAtletaUseCase;
@@ -90,6 +95,11 @@ public class SistemaOlimpiadasFacade {
     }
 
     public List<AtletaResponse> listarAtletas() {
+
+        // Como a facade só repassa as chamadas para os casos de uso, ela fica simples de entender.
+        // Uma melhoria possível seria dividir em facades menores por assunto, como AtletaFacade,
+        // CompeticaoFacade e RelatorioFacade, caso o projeto continue aumentando.
+
         return listarAtletasUseCase.execute();
     }
 }
