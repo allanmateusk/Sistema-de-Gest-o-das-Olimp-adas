@@ -18,6 +18,10 @@ public class GerarRelatorioUseCase {
 
     @Transactional
     public List<MedalhaPorPaisDto> execute() {
+
+        // Como esse método apenas busca dados para gerar um relatório, talvez o @Transactional não seja necessário.
+        // Se não tiver nenhuma alteração no banco, o método pode ficar sem essa anotação para deixar mais claro que é só uma consulta.
+
         return relatorioDao.medalhasPorPais();
     }
 }
