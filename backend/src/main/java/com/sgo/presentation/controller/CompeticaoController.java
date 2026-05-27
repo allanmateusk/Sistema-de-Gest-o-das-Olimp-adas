@@ -37,6 +37,10 @@ public class CompeticaoController {
     @Secured({"ADMIN", "USUARIO"})
     @Operation(summary = "Listar competições")
     public List<CompeticaoResponse> listar() {
+
+        // O método está simples e deixa a regra de listagem dentro da facade.
+        // Isso é bom, porque o controller fica responsável só por receber a requisição e devolver a resposta.
+
         return facade.listarCompeticoes();
     }
 
@@ -45,12 +49,24 @@ public class CompeticaoController {
     @Operation(summary = "Cadastrar competição")
     @ApiResponse(responseCode = "201", description = "Competição criada (Location: recurso com o id no corpo).")
     public HttpResponse<IdResponse> criar(@Body @Valid CompeticaoRequest request) {
+
+        // O uso de @Valid está correto, porque força a validação dos dados antes de chamar a regra de cadastro.
+        // Isso evita que dados inválidos cheguem no caso de uso.
+
         UUID id = facade.cadastrarCompeticao(
                 request.nome(),
                 request.modalidade(),
                 request.dataInicio(),
                 request.dataFim()
         );
+
+        // A resposta 201 está adequada para criação de recurso.
+        // Uma melhoria seria adicionar o header Location com a rota do recurso criado,
+        // já que a própria descrição do Swagger cita isso.
+
         return HttpResponse.created(new IdResponse(id));
     }
+
+    // A separação de permissões ficou clara: ADMIN pode criar e ADMIN/USUARIO podem listar.
+    // Seria interessante documentar no Swagger também possíveis respostas de erro, como 400, 401, 403 e 409.
 }
